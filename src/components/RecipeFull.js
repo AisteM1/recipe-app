@@ -1,7 +1,7 @@
 import React from "react";
 import { X } from "react-feather";
 
-const RecipeFull = ({ selectedRecipe, handleUnslectRecipe }) => {
+const RecipeFull = ({ selectedRecipe, handleUnselectRecipe }) => {
     return (
        <div className='recipe-details'>
         <article>
@@ -25,7 +25,7 @@ const RecipeFull = ({ selectedRecipe, handleUnslectRecipe }) => {
       <h3>Ingredients:</h3>
 
       <ul className='ingredient-list'>
-        {selectedRecipe.ingredient.split(",").map((ingredient, index) => {
+        {selectedRecipe.ingredients.split(",").map((ingredient, index) => {
             <li className='ingredient' key={index}>
                 {ingredient}
             </li>
