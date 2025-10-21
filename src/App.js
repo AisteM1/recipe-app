@@ -9,14 +9,14 @@ import "./App.css";
 function App() {
   const [recipes, setRecipes] = useState([])
   const [selectedRecipe, setSelectedRecipe] = useState(null)
-  const [showNewRecipeForm, setShowNewRecipeForm] = useState(false);
-  
-  
+  const [showNewRecipeForm, setShowNewRecipeForm] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("");
+
   const [newRecipe, setNewRecipe] = useState({
     title: "",
     ingredients: "",
     instructions: "",
-    servings: 1, // conservative default
+    servings: 1, 
     description: "",
     image_url: "https://images.pexels.com/photos/9986228/pexels-photo-9986228.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" //default
   });
@@ -27,12 +27,13 @@ useEffect(() => {
     const response = await fetch("/api/recipes");
     if (response.ok) {
       const data = await response.json();
-      setRecipes(data)
+      setRecipes(data);
     } else {
-      console.log("Oops - could not fetch recipes!")
+      console.log("Oops - could not fetch recipes!");
     }
    } catch(e) {
-    console.error("An error occured during the request", e)
+    console.error("An error occured during the request", e);
+    console.log("An unexpected error occured. Please try again later.");
    }
   };
    fetchAllRecipes();
@@ -64,7 +65,8 @@ const handleNewRecipe = async (e, newRecipe) => {
         instructions: "",
         servings: 1, 
         description: "",
-        image_url: "https://images.pexels.com/photos/9986228/pexels-photo-9986228.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" //default
+        image_url: 
+        "https://images.pexels.com/photos/9986228/pexels-photo-9986228.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" //default
      });
     } else {
       console.error("Oops - could not add recipe!")
@@ -76,7 +78,7 @@ const handleNewRecipe = async (e, newRecipe) => {
 
 const handleUpdateRecipe = async (e, selectedRecipe) => {
   e.preventDefault();
-  const {id} = selectedRecipe;
+  const { id } = selectedRecipe;
 
   try {
     const response = await fetch(`/api/recipes/${id}`, {
@@ -93,19 +95,20 @@ const handleUpdateRecipe = async (e, selectedRecipe) => {
       setRecipes(
         recipes.map((recipe) => {
           if (recipe.id === id) {
-            return data.recipe 
+          // Return the saved data from the db 
+            return data.recipe;
           }
           return recipe 
         })
       );
-
       console.log("Recipe updated!");
-
     } else {
-      console.error("Oops - failed to update recipe. Try again!")
+      console.error("Oops - failed to update recipe. Try again!");
+      console.error("Failed to update recipe. Please try again.");
     }
-  } catch (e) {
-    console.error("An error occured during the request: ",e);
+  } catch (error) {
+    console.error("An error occured during the request: ",error);
+    console.error("An unexpected error occured. Please try again later.");
   }
 
   setSelectedRecipe(null);
@@ -126,10 +129,20 @@ const handleDeleteRecipe = async (recipeId) => {
   }
   } catch (e) {
     console.error("Something went wrong during the request:",e)
-
+    console.error("An unexpected error occured. Please try again later.");
   }
-}
- 
+};
+
+const handleSearch = () => {
+  const searchResults = recipes.filter((recipe) => {
+    const valuesToSearch = [recipe.title, recipe.ingredients, recipe.description];
+    // Check if the search term is included in any of the values and will return a boolean value
+    return valuesToSearch.some((value) => value.toLowerCase(). includes(searchTerm.toLowerCase()));
+  });
+
+  return searchResults;
+};
+
 const handleSelectRecipe = (recipe) => {
   setSelectedRecipe(recipe)
 };
@@ -140,7 +153,6 @@ const handleUnselectRecipe = () => {
 
 const hideRecipeForm = () => {
   setShowNewRecipeForm(false);
-
 };
 
 const showRecipeForm = () => {
@@ -148,46 +160,51 @@ const showRecipeForm = () => {
   setSelectedRecipe(null);
 };
 
+const updateSearchTerm = (text) => {  
+  setSearchTerm(text);
+};
+
 const onUpdateForm = (e, action = "new") => {
   const { name, value } = e.target;
-  if (action === "update" ){
+  if (action === "update" ) {
     setSelectedRecipe({
       ...selectedRecipe,
        [name]: value 
-    })
+    });
   } else if (action === "new") {
       setNewRecipe({...newRecipe, [name]: value})
   }
 };
 
+const displayedRecipes = searchTerm ? handleSearch() : recipes;
+
   return (
     <div className='recipe-app'>
-      <Header showRecipeForm={showRecipeForm} />
+      <Header showRecipeForm={showRecipeForm} updateSearchTerm={updateSearchTerm} searchTerm={searchTerm}/>
       {showNewRecipeForm && (
       <NewRecipeForm 
       newRecipe={newRecipe} 
       hideRecipeForm={hideRecipeForm} 
-      onUpdateForm={onUpdateForm}
       handleNewRecipe={handleNewRecipe}
-      handleDeleteRecipe={handleDeleteRecipe}
+      onUpdateForm={onUpdateForm}
       />
       )}
       {selectedRecipe && (
        <RecipeFull 
-       handleUpdateRecipe={handleUpdateRecipe}
        selectedRecipe={selectedRecipe} 
        handleUnselectRecipe={handleUnselectRecipe} 
+       handleUpdateRecipe={handleUpdateRecipe}
        onUpdateForm={onUpdateForm}
+       handleDeleteRecipe={handleDeleteRecipe}
        />
        )}
-     {!selectedRecipe && (
+     {!selectedRecipe && !showNewRecipeForm && (
       <div className='recipe-list'>
-       {recipes.map((recipe)=> (
+       {displayedRecipes.map((recipe)=> (
         <RecipeExcerpt 
         key={recipe.id} 
         recipe={recipe} 
-        handleSelectRecipe={handleSelectRecipe} 
-        />    
+        handleSelectRecipe={handleSelectRecipe} />    
       ))}
       </div>
      )}
