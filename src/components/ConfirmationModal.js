@@ -1,19 +1,19 @@
-import React from 'react'
+import React from "react";
 
 const ConfirmationModal = ({ message, onCancel, onConfirm }) => {
-    return (
-    <div className='confirm'>
-     <div className='confirm-content'>
-      <p>{message}</p>
-       <button className='cancel-button' onClick={onCancel}>
-        Cancel
+  return (
+    <div className="confirm">
+      <div className="confirm-content">
+        <p>{message}</p>
+        <button className="cancel-button" onClick={onCancel}>
+          Cancel
         </button>
-         <button className='delete-button' onClick={onConfirm}>
-        Delete
+        <button className="delete-button" onClick={onConfirm}>
+          Delete
         </button>
-     </div>
+      </div>
     </div>
-    );
-   };
+  );
+};
 
-export default ConfirmationModal 
+export default ConfirmationModal;
