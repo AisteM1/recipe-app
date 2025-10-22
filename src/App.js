@@ -86,7 +86,7 @@ function App() {
     }
   };
 
-  const handleUpdateRecipe = async (e, selectedRecipe) => {
+const handleUpdateRecipe = async (e, selectedRecipe) => {
     e.preventDefault();
     const { id } = selectedRecipe;
 
@@ -111,7 +111,7 @@ function App() {
             return recipe;
           })
         );
-        displayToast("Recipe updated!", "sucess");
+        displayToast("Recipe updated!", "success");
       } else {
         displayToast("Failed to update recipe. Please try again.", "error");
       }

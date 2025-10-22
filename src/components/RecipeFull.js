@@ -65,6 +65,7 @@ const RecipeFull = ({
           <p>{selectedRecipe.description}</p>
 
           <h3>Ingredients:</h3>
+          <p>{selectedRecipe.ingredients}</p>
 
           <ul className="ingredient-list">
             {selectedRecipe.ingredients.split(",").map((ingredient, index) => {
