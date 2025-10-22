@@ -4,15 +4,15 @@ import Header from "./components/Header";
 import RecipeExcerpt from "./components/RecipeExcerpt";
 import RecipeFull from "./components/RecipeFull";
 import NewRecipeForm from "./components/NewRecipeForm";
-import displayToast from "./helpers/toastHelper";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"
+import displayToast from "./helpers/toastHelper";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 function App() {
-  const [recipes, setRecipes] = useState([])
-  const [selectedRecipe, setSelectedRecipe] = useState(null)
-  const [showNewRecipeForm, setShowNewRecipeForm] = useState(false)
+  const [recipes, setRecipes] = useState([]);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [showNewRecipeForm, setShowNewRecipeForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const [newRecipe, setNewRecipe] = useState({
@@ -39,7 +39,7 @@ useEffect(() => {
    }
   };
    fetchAllRecipes();
-},[]);
+}, []);
 
 const handleNewRecipe = async (e, newRecipe) => {
   e.preventDefault();
@@ -57,8 +57,9 @@ const handleNewRecipe = async (e, newRecipe) => {
       const data = await response.json();
 
       setRecipes([...recipes, data.recipe])
-
-      displayToast("Recipe added successfully!");
+      
+      console.log("Recipe added successfully!");
+      displayToast("Recipe added successfully!", "success");
 
       setShowNewRecipeForm(false);
       setNewRecipe ({
@@ -74,7 +75,7 @@ const handleNewRecipe = async (e, newRecipe) => {
       displayToast("Oops - could not add recipe!", "error")
     }
   } catch (e) {
-    displayToast("An error occured during the request: ", "error");
+    displayToast("An unexpected error occured. Please try again later.", "error");
   }
 };
 
@@ -86,7 +87,7 @@ const handleUpdateRecipe = async (e, selectedRecipe) => {
     const response = await fetch(`/api/recipes/${id}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application.json"
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(selectedRecipe),
     });
@@ -103,12 +104,12 @@ const handleUpdateRecipe = async (e, selectedRecipe) => {
           return recipe 
         })
       );
-      displayToast("Recipe updated!");
+      displayToast("Recipe updated!", "sucess");
     } else {
-      displayToast("Oops - failed to update recipe. Try again!", "error");
+      displayToast("Failed to update recipe. Please try again.", "error");
     }
   } catch (error) {
-    displayToast("An error occured during the request: ", "error");
+    displayToast("An unexpected error occured. Please try again later.", "error");
   }
 
   setSelectedRecipe(null);
@@ -125,10 +126,10 @@ const handleDeleteRecipe = async (recipeId) => {
     setSelectedRecipe(null);
     displayToast("Recipe deleted successfully!");
   } else {
-    displayToast("Oops - could not delete recipe! Try again.", "error")
+    displayToast("Could not delete recipe, please try again later.", "error")
   }
   } catch (e) {
-    displayToast("Something went wrong during the request:", "error")
+    displayToast("An unexpected error occurred. Please try again later.", "error")
   }
 };
 
@@ -188,6 +189,7 @@ const displayedRecipes = searchTerm ? handleSearch() : recipes;
       <Header 
       showRecipeForm={showRecipeForm} 
       updateSearchTerm={updateSearchTerm} 
+      handleSearch={handleSearch}
       searchTerm={searchTerm}
       displayAllRecipes={displayAllRecipes}
       />
@@ -206,6 +208,7 @@ const displayedRecipes = searchTerm ? handleSearch() : recipes;
        handleUpdateRecipe={handleUpdateRecipe}
        onUpdateForm={onUpdateForm}
        handleDeleteRecipe={handleDeleteRecipe}
+       handleSelectRecipe={handleSelectRecipe}
        />
        )}
      {!selectedRecipe && !showNewRecipeForm && (

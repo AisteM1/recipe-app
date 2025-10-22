@@ -5,11 +5,11 @@ const displayToast = (message, type = "success" ) => {
     position: "bottom-right",
     autoClose: 2000
    };
+
    if (type === "success") {
      toast.success(message, options);
    } else if (type === "error") {
     toast.error(message, options);
-
    }
    };
 
