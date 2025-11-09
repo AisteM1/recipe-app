@@ -42,7 +42,7 @@ const RecipeFull = ({
         <article>
           <header>
             <figure>
-              <img alt-={selectedRecipe.title} src={selectedRecipe.image_url} />
+              <img alt={selectedRecipe.title} src={selectedRecipe.image_url} />
             </figure>
             <h2>{selectedRecipe.title}</h2>
             <div className="button-container">
