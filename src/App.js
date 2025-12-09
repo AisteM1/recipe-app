@@ -30,7 +30,7 @@ function App() {
       try {
         const response = await fetch(`/api/recipes`);
         if (response.ok) {
-          const data = await response.json();;
+          const data = await response.json();
           setRecipes(data);
         } else {
           displayToast("Oops - could not fetch recipes!", "error");
