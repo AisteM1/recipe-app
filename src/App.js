@@ -28,7 +28,7 @@ function App() {
   useEffect(() => {
     const fetchAllRecipes = async () => {
       try {
-        const response = await fetch("/api/recipes");
+        const response = await fetch(`/api/recipes`);
         if (response.ok) {
           const data = await response.json();
           setRecipes(data);
