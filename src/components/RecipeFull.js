@@ -70,9 +70,9 @@ const RecipeFull = ({
           <ul className="ingredient-list">
             {selectedRecipe.ingredients.split(",").map((ingredient, index) => {
               return (
-              <li className="ingredient" key={index}>
-                {ingredient}
-              </li>
+                <li className="ingredient" key={index}>
+                  {ingredient}
+                </li>
               );
             })}
           </ul>
