@@ -86,7 +86,7 @@ function App() {
     }
   };
 
-const handleUpdateRecipe = async (e, selectedRecipe) => {
+  const handleUpdateRecipe = async (e, selectedRecipe) => {
     e.preventDefault();
     const { id } = selectedRecipe;
 
